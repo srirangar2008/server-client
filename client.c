@@ -14,7 +14,7 @@ struct datapacket
 
 int main()
 {
-  char* currentHost = hostname();
+  char* currentHost = currenthostname();
   char* currentIPAddress = getIPAddress();
   printf("currentHost = %s\n", currentHost);
   printf("Current IP address = %s\n", currentIPAddress);

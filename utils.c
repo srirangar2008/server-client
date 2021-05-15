@@ -9,7 +9,7 @@
 #include "utils.h"
 
 
-char* hostname()
+char* currenthostname()
 {
   char* currentHostName = (char*)calloc(64, sizeof(char));
   gethostname(currentHostName, 64);
@@ -21,7 +21,7 @@ char* getIPAddress()
 {
   char* IPAddress = (char*)calloc(16, sizeof(char));
   struct hostent* host_entry;
-  host_entry = gethostbyname(hostname());
+  host_entry = gethostbyname(currenthostname());
   IPAddress = inet_ntoa(*((struct in_addr*)host_entry->h_addr_list[0]));
   printf("Host IP = %s\n", IPAddress);
   return IPAddress;

@@ -2,7 +2,7 @@
 
 server()
 {
-  gcc -o server server.c
+  gcc -o server server.c utils.c
 }
 
 client()
