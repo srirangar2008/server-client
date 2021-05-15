@@ -7,7 +7,7 @@ server()
 
 client()
 {
-  gcc -o client client.c  
+  gcc -o client client.c utils.c 
 }
 
 echo "Compiling server"

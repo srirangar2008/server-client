@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <stdlib.h>
+#include "utils.h"
 
 struct datapacket
 {
@@ -13,10 +14,16 @@ struct datapacket
 
 int main()
 {
+  char* currentHost = hostname();
+  printf("currentHost = %s\n", currentHost);
+  free(currentHost);
+  exit(0);
   int sock = 0, valread;
   struct sockaddr_in serv_addr;
   char* hello = "Hello from client.\n";
-  char buffer[1024] = {0};
+  char tx_buffer[1024] = {0};
+  char rx_buffer[1024] = {0};
+  char* client_name = "RangaGaming3 : ";
 
   if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
   {
@@ -39,12 +46,32 @@ int main()
     exit(-1);
   }
 
-  struct datapacket data;
+  /*struct datapacket data;
   data.id = 0;
   strncpy(data.message, "Hi server id 0", sizeof(data.message));
-  send(sock, (struct datapacket*)&data, sizeof(struct datapacket), 0);
-  printf("Hello sent from client.\n");
-  valread = read(sock, buffer, 1024);
-  printf("Client buffer recvd : %s\n", buffer);
+  */
+  char* message = (char*)calloc(1024, sizeof(char));
+  while(1) 
+  {
+    //valread = read(sock, rx_buffer, 1024);
+    //printf("%s", rx_buffer);
+    printf("Type your message.\n");
+    char* message = (char*)calloc(1024, sizeof(char));
+    printf("RangaGaming3 : ");
+    bzero(message, sizeof(message));
+    scanf("%s",message);
+    strncat(tx_buffer, client_name, strlen(client_name));
+    strncat(tx_buffer, message, strlen(message));
+    //printf("TX Buffer = %s", tx_buffer);
+    send(sock, tx_buffer, sizeof(tx_buffer), 0);
+    printf("Message sent.\n");
+    //printf("Hello sent from client.\n");
+    valread = read(sock, rx_buffer, 1024);
+    printf("%s", rx_buffer);
+    printf("Message recvd.\n");
+    //printf("Client buffer recvd : %s\n", buffer);
+    //bzero(message, sizeof(message));
+    free(message);
+  }
   return 0;
 }
