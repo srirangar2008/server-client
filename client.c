@@ -15,7 +15,9 @@ struct datapacket
 int main()
 {
   char* currentHost = hostname();
+  char* currentIPAddress = getIPAddress();
   printf("currentHost = %s\n", currentHost);
+  printf("Current IP address = %s\n", currentIPAddress);
   free(currentHost);
   exit(0);
   int sock = 0, valread;
