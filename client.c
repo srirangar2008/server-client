@@ -6,11 +6,6 @@
 #include <stdlib.h>
 #include "utils.h"
 
-struct datapacket
-{
-  int id;
-  char message[20];
-};
 
 int main()
 {

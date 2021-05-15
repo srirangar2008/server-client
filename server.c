@@ -7,12 +7,6 @@
 #include "server.h"
 #include "utils.h"
 
-struct datapacket
-{
-  int id;
-  char message[20];
-};
-
 int main()
 {
 	int server_fd, new_socket, valread;
@@ -23,7 +17,8 @@ int main()
   char rx_buffer[1024] = {0};
   char* server_name = "RaspberryPi : ";
   char* hello = "Hello from the server.";
-  struct datapacket data_recvd;
+  struct datapacket datapack;
+  struct registerClient clientReg;
 
   struct serverInfo serverinfo = 
   {
@@ -35,6 +30,8 @@ int main()
   strncpy(serverinfo.ipAddress, serverIPAddress, strlen(serverIPAddress));
   free(serverHostName);
   free(serverIPAddress);
+
+  printf("Server ready now.\n");
   exit(0);
 
 
@@ -74,7 +71,17 @@ int main()
     exit(-1);
   }
 
-  valread = read(new_socket, rx_buffer, sizeof(rx_buffer));
+  valread = read(new_socket, &datapack, sizeof(struct datapacket));
+  if(datapack.request == REQUEST)
+  {
+    printf("Server : Calling the register function.\n");
+    goto cont;
+  }
+  else
+  {
+    printf("Server : Rejecting connection.\n");
+    goto end;
+  }
  // valread = read(new_socket, (struct datapacket*)&data_recvd, sizeof(struct datapacket));
   //printf("%s\n", buffer);
  /* if(strlen(&data_recvd.message != 0))
@@ -93,7 +100,7 @@ int main()
         strncpy(buffer, "Option xx", strlen("Option xx"));
         break;
   }*/
-  char* sendmessage = (char*)calloc(1024,sizeof(char));
+  /*char* sendmessage = (char*)calloc(1024,sizeof(char));
   printf("Message recvd from client.\n");
   printf("%s\n", rx_buffer);
   printf("RaspberryPi : ");
@@ -105,7 +112,11 @@ int main()
   send(new_socket, tx_buffer, 1024, 0);
   printf("Message sent to client.\n");
   //printf("Server : Option message sent,\n");
-  free(sendmessage);
+  free(sendmessage);*/
+  end :
+    printf("Connection refused as the client is not registered.\n");
+  cont : 
+    printf("Client registration successful.\n");
   }
   return 0;
 }
