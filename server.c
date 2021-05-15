@@ -7,6 +7,53 @@
 #include "server.h"
 #include "utils.h"
 
+struct RegisterClients
+{
+  struct registerClient client;
+  struct RegisterClients* next;
+};
+
+struct RegisterClients* headNode;
+
+struct RegisterClients* InitHeadNode()
+{
+  struct RegisterClients* headNode = (struct RegisterClients*)calloc(1, sizeof(struct RegisterClients));
+  headNode->next = NULL;
+  /*headNode->client = {.id = 0,
+                      . NULL, NULL};*/
+  return headNode;
+}
+
+void AddNode(struct RegisterClients* head, struct registerClient* data)
+{
+  while(head->next == NULL)
+  {
+    head = head->next;
+  }
+  struct RegisterClients* new = (struct RegisterClients*)calloc(1, sizeof(struct RegisterClients));
+  new->client.id = data->id;
+  strncpy(new->client.clienthostname, data->clienthostname, strlen(data->clienthostname));
+  strncpy(new->client.ipAddress,data->ipAddress,strlen(data->ipAddress));
+  new->next = NULL;
+  head->next = new;
+  printf("Client added\n");
+}
+
+void clientregister(struct datapacket *data, int socket_id)
+{ 
+  printf("Querying the client info.\n");
+  struct datapacket getClientData;
+  struct registerClient clientData;
+  getClientData.id = 0xFF;
+  getClientData.request = QUERY_CLIENT_INFO;
+  send(socket_id, &getClientData, sizeof(struct datapacket), 0);
+  printf("Waiting for client information.\n");
+  int valread = read(socket_id, &clientData, sizeof(struct registerClient));
+  AddNode(headNode, &clientData);
+  exit(0);
+
+}
+
 int main()
 {
 	int server_fd, new_socket, valread;
@@ -19,6 +66,7 @@ int main()
   char* hello = "Hello from the server.";
   struct datapacket datapack;
   struct registerClient clientReg;
+  headNode = InitHeadNode();
 
   struct serverInfo serverinfo = 
   {
@@ -32,7 +80,7 @@ int main()
   free(serverIPAddress);
 
   printf("Server ready now.\n");
-  exit(0);
+  //exit(0);
 
 
   if((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -46,7 +94,7 @@ int main()
     perror("setsockopt failed.");
     exit(-1);
   }
-
+  int cont = 0, end = 0;
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;
   address.sin_port = htons(1100);
@@ -75,12 +123,13 @@ int main()
   if(datapack.request == REQUEST)
   {
     printf("Server : Calling the register function.\n");
-    goto cont;
+    clientregister(&datapack, new_socket);
+    cont = 1;
   }
   else
   {
     printf("Server : Rejecting connection.\n");
-    goto end;
+    end = 1;
   }
  // valread = read(new_socket, (struct datapacket*)&data_recvd, sizeof(struct datapacket));
   //printf("%s\n", buffer);
@@ -113,9 +162,9 @@ int main()
   printf("Message sent to client.\n");
   //printf("Server : Option message sent,\n");
   free(sendmessage);*/
-  end :
+  if(end) 
     printf("Connection refused as the client is not registered.\n");
-  cont : 
+  if(cont) 
     printf("Client registration successful.\n");
   }
   return 0;
