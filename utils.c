@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
+#include <string.h>
 #include "utils.h"
 
 
@@ -21,8 +21,10 @@ char* getIPAddress()
 {
   char* IPAddress = (char*)calloc(16, sizeof(char));
   struct hostent* host_entry;
+  char* temp_ip;
   host_entry = gethostbyname(currenthostname());
-  IPAddress = inet_ntoa(*((struct in_addr*)host_entry->h_addr_list[0]));
+  temp_ip = inet_ntoa(*((struct in_addr*)host_entry->h_addr_list[0]));
+  strncpy(IPAddress, temp_ip, strlen(temp_ip));
   printf("Host IP = %s\n", IPAddress);
   return IPAddress;
 }

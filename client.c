@@ -19,6 +19,7 @@ int main()
   printf("currentHost = %s\n", currentHost);
   printf("Current IP address = %s\n", currentIPAddress);
   free(currentHost);
+  free(currentIPAddress);
   exit(0);
   int sock = 0, valread;
   struct sockaddr_in serv_addr;
