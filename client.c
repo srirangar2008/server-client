@@ -86,5 +86,9 @@ int main()
     free(message);
     break;
   }
+  printf("Client terminating.\n");
+  data.id = 1;
+  data.request = TERMINATE;
+  send(sock, &data, sizeof(struct datapacket), 0);
   return 0;
 }

@@ -51,7 +51,7 @@ void AddNode(struct RegisterClients* head, struct registerClient* data)
     temp = temp->next;
   }
   struct RegisterClients* new = (struct RegisterClients*)calloc(1, sizeof(struct RegisterClients));
-  new->client.id = ++lengthOfClientList;
+  new->client.id = data->id;
   strncpy(new->client.clienthostname, data->clienthostname, strlen(data->clienthostname));
   strncpy(new->client.ipAddress,data->ipAddress,strlen(data->ipAddress));
   new->status.id = data->id;
@@ -75,6 +75,36 @@ void clientregister(struct datapacket *data, int socket_id)
   AddNode(headNode, &clientData);
   //exit(0);
 
+}
+
+void DeleteNode(struct RegisterClients* head, int clientID)
+{
+  struct RegisterClients* temp = head;
+  struct RegisterClients* prev = temp;
+  while(temp != NULL)
+  {
+    if(temp->status.id == clientID)
+    {
+      prev->next = temp->next;
+      free(temp);
+      return;
+    }
+    else
+    {
+      prev = temp;
+      temp = temp->next;
+      
+    }
+  }
+  printf("Nothing found. Some bug.\n");
+  return;
+}
+
+void clientDeregister(struct datapacket* data, int socket_id)
+{
+  printf("Deregistering the client with client id : %d\n", data->id);
+  printf("Remove client now. \n");
+  DeleteNode(headNode, data->id);
 }
 
 int main()
@@ -148,6 +178,11 @@ int main()
     printf("Server : Calling the register function.\n");
     clientregister(&datapack, new_socket);
     cont = 1;
+  }
+  else if(datapack.request == TERMINATE)
+  {
+    printf("Server : Deregistering the client with id %d\n", datapack.id);
+    clientDeregister(&datapack, new_socket);
   }
   else
   {
