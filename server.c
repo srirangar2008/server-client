@@ -29,7 +29,7 @@ struct RegisterClients* InitHeadNode()
 void PrintClients(struct RegisterClients* head)
 {
   struct RegisterClients* temp = head;
-  while(temp->next != NULL)
+  while(temp != NULL)
   {
     printf("Client ID : %d\n \
             Client Hostname : %s\n \
