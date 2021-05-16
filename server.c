@@ -157,7 +157,7 @@ int main()
     perror("bind failed");
     exit(-1);
   }
-  while(1)
+ while(1)
   {
     printf("Waiting for message from client.\n");
   if(listen(server_fd,3) < 0)
@@ -165,13 +165,15 @@ int main()
     perror("Listen failed");
     exit(-1);
   }
-
+  printf("Listen succesdful\n");
   if((new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen)) < 0)
   {
     perror("accept failed");
     exit(-1);
   }
-
+  printf("accept successful.\n");
+ // while(1)
+ // {
   valread = read(new_socket, &datapack, sizeof(struct datapacket));
   if(datapack.request == REQUEST)
   {
