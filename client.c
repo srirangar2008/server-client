@@ -81,14 +81,16 @@ int main()
       printf("Sent the client info.\n");
 
     }
+    sleep(1);
+    printf("Client terminating.\n");
+    data.id = 1;
+    data.request = TERMINATE;
+    //send(sock, &data, sizeof(struct datapacket), 0);
     //printf("Client buffer recvd : %s\n", buffer);
     //bzero(message, sizeof(message));
     free(message);
     break;
   }
-  printf("Client terminating.\n");
-  data.id = 1;
-  data.request = TERMINATE;
-  send(sock, &data, sizeof(struct datapacket), 0);
+  
   return 0;
 }
