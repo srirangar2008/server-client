@@ -10,6 +10,7 @@
 struct RegisterClients
 {
   struct registerClient client;
+  struct clientStatus status;
   struct RegisterClients* next;
 };
 
@@ -23,6 +24,8 @@ struct RegisterClients* InitHeadNode()
   headNode->client.id = 0xFF;
   strncpy(headNode->client.clienthostname, currenthostname(), sizeof(headNode->client.clienthostname));
   strncpy(headNode->client.ipAddress, getIPAddress(), sizeof(headNode->client.ipAddress));
+  headNode->status.id = 0xFF;
+  headNode->status.registered = 1;
   return headNode;
 }
 
@@ -33,8 +36,9 @@ void PrintClients(struct RegisterClients* head)
   {
     printf("Client ID : %d\n \
             Client Hostname : %s\n \
-            Client IP = %s\n", \
-            temp->client.id, temp->client.clienthostname, temp->client.ipAddress);
+            Client IP = %s\n \
+            Client registartion status : %d\n",
+            temp->client.id, temp->client.clienthostname, temp->client.ipAddress, temp->status.registered);
     temp = temp->next;
   }
 }
@@ -50,6 +54,8 @@ void AddNode(struct RegisterClients* head, struct registerClient* data)
   new->client.id = data->id;
   strncpy(new->client.clienthostname, data->clienthostname, strlen(data->clienthostname));
   strncpy(new->client.ipAddress,data->ipAddress,strlen(data->ipAddress));
+  new->status.id = data->id;
+  new->status.registered = 1;
   new->next = NULL;
   temp->next = new;
   printf("Client added\n");
