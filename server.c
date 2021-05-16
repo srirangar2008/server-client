@@ -19,24 +19,41 @@ struct RegisterClients* InitHeadNode()
 {
   struct RegisterClients* headNode = (struct RegisterClients*)calloc(1, sizeof(struct RegisterClients));
   headNode->next = NULL;
-  /*headNode->client = {.id = 0,
-                      . NULL, NULL};*/
+  //populating headnode with server info.
+  headNode->client.id = 0xFF;
+  strncpy(headNode->client.clienthostname, currenthostname(), sizeof(headNode->client.clienthostname));
+  strncpy(headNode->client.ipAddress, getIPAddress(), sizeof(headNode->client.ipAddress));
   return headNode;
+}
+
+void PrintClients(struct RegisterClients* head)
+{
+  struct RegisterClients* temp = head;
+  while(temp->next != NULL)
+  {
+    printf("Client ID : %d\n \
+            Client Hostname : %s\n \
+            Client IP = %s\n", \
+            temp->client.id, temp->client.clienthostname, temp->client.ipAddress);
+    temp = temp->next;
+  }
 }
 
 void AddNode(struct RegisterClients* head, struct registerClient* data)
 {
-  while(head->next == NULL)
+  struct RegisterClients* temp = head;
+  while(temp->next != NULL)
   {
-    head = head->next;
+    temp = temp->next;
   }
   struct RegisterClients* new = (struct RegisterClients*)calloc(1, sizeof(struct RegisterClients));
   new->client.id = data->id;
   strncpy(new->client.clienthostname, data->clienthostname, strlen(data->clienthostname));
   strncpy(new->client.ipAddress,data->ipAddress,strlen(data->ipAddress));
   new->next = NULL;
-  head->next = new;
+  temp->next = new;
   printf("Client added\n");
+  PrintClients(head);
 }
 
 void clientregister(struct datapacket *data, int socket_id)
@@ -50,7 +67,7 @@ void clientregister(struct datapacket *data, int socket_id)
   printf("Waiting for client information.\n");
   int valread = read(socket_id, &clientData, sizeof(struct registerClient));
   AddNode(headNode, &clientData);
-  exit(0);
+  //exit(0);
 
 }
 

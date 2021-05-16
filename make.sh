@@ -2,12 +2,12 @@
 
 server()
 {
-  gcc -o server server.c utils.c
+  gcc -g -o server server.c utils.c
 }
 
 client()
 {
-  gcc -o client client.c utils.c 
+  gcc -g -o client client.c utils.c 
 }
 
 echo "Compiling server"

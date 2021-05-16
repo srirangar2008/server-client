@@ -1,6 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#define SERVER_IP "192.168.0.116"
 struct registerClient
 {
     int id;
