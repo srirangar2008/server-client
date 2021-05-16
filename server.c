@@ -15,7 +15,7 @@ struct RegisterClients
 };
 
 struct RegisterClients* headNode;
-
+int lengthOfClientList = 0;
 struct RegisterClients* InitHeadNode()
 {
   struct RegisterClients* headNode = (struct RegisterClients*)calloc(1, sizeof(struct RegisterClients));
@@ -51,7 +51,7 @@ void AddNode(struct RegisterClients* head, struct registerClient* data)
     temp = temp->next;
   }
   struct RegisterClients* new = (struct RegisterClients*)calloc(1, sizeof(struct RegisterClients));
-  new->client.id = data->id;
+  new->client.id = ++lengthOfClientList;
   strncpy(new->client.clienthostname, data->clienthostname, strlen(data->clienthostname));
   strncpy(new->client.ipAddress,data->ipAddress,strlen(data->ipAddress));
   new->status.id = data->id;
