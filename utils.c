@@ -31,7 +31,7 @@ char* getIPAddress()
 
 char* hostName()
 { 
-  char* name = (char*)calloc(64,sizeof(char));
+  char* temp = (char*)calloc(64,sizeof(char));
   int length = 64;
   FILE* fpipe;
   fpipe = (FILE*)popen("hostname", "r");
@@ -40,7 +40,10 @@ char* hostName()
     ERROR_LOG("popen failed.\n");
     exit(0);
   }
-  fread(name, sizeof(char), length, fpipe);
+  fread(temp, sizeof(char), length, fpipe);
+  char* name = (char*)calloc(strlen(temp),sizeof(char));
+  strncpy(name, temp, strlen(temp) - 1);
+  free(temp);
   printf("%s : %d : The hostname = %s\n", __FILE__, __LINE__, name);
   fclose(fpipe);
   return name;
@@ -48,8 +51,8 @@ char* hostName()
 
 char* ipAddress()
 {
-  char* ip = (char*)calloc(20, sizeof(char));
   int length = 20;
+  char* temp  = (char*)calloc(20, sizeof(char));;
   FILE* fpipe;
   fpipe = (FILE*)popen("hostname -i","r");
   if(fpipe == 0)
@@ -57,8 +60,11 @@ char* ipAddress()
     ERROR_LOG("popen failed.\n");
     exit(0);
   }
-  fread(ip, sizeof(char), length, fpipe);
-  printf("IP = %s\n", ip);
+  fread(temp, sizeof(char), length, fpipe);
+  char* ip = (char*)calloc(strlen(temp), sizeof(char));
+  strncpy(ip, temp, strlen(temp) - 1);
+  free(temp);
+  //printf("IP = %s, length = %d", ip, strlen(ip));
   fclose(fpipe);
   return ip;
 }
