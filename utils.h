@@ -1,6 +1,12 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+
+#define ERROR_LOG(fmt, ...) \
+    do{ fprintf(stderr, fmt __VA_ARGS__);}while(0);
+
+
+
 enum Request
 {
     REQUEST = 0,
@@ -17,6 +23,9 @@ struct datapacket
 
 char* currenthostname();
 char* getIPAddress();
+
+char* hostName();
+char* ipAddress();
 
 #endif
 

@@ -28,3 +28,39 @@ char* getIPAddress()
   printf("Host IP = %s\n", IPAddress);
   return IPAddress;
 }
+
+char* hostName()
+{ 
+  char* name = (char*)calloc(64,sizeof(char));
+  int length = 64;
+  FILE* fpipe;
+  fpipe = (FILE*)popen("hostname", "r");
+  if(fpipe == 0)
+  {
+    ERROR_LOG("popen failed.\n");
+    exit(0);
+  }
+  fread(name, sizeof(char), length, fpipe);
+  printf("%s : %d : The hostname = %s\n", __FILE__, __LINE__, name);
+  fclose(fpipe);
+  return name;
+}
+
+char* ipAddress()
+{
+  char* ip = (char*)calloc(20, sizeof(char));
+  int length = 20;
+  FILE* fpipe;
+  fpipe = (FILE*)popen("hostname -i","r");
+  if(fpipe == 0)
+  {
+    ERROR_LOG("popen failed.\n");
+    exit(0);
+  }
+  fread(ip, sizeof(char), length, fpipe);
+  printf("IP = %s\n", ip);
+  fclose(fpipe);
+  return ip;
+}
+
+

@@ -125,8 +125,8 @@ int main()
   {
     .id = 0xFF
   };
-  char* serverHostName = currenthostname();
-  char* serverIPAddress = getIPAddress();
+  char* serverHostName = hostName();
+  char* serverIPAddress = ipAddress();
   strncpy(serverinfo.serverhostname, serverHostName, strlen(serverHostName));
   strncpy(serverinfo.ipAddress, serverIPAddress, strlen(serverIPAddress));
   free(serverHostName);

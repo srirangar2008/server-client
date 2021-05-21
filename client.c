@@ -10,12 +10,12 @@
 
 int main()
 {
-  char* currentHost = currenthostname();
+  /*char* currentHost = currenthostname();
   char* currentIPAddress = getIPAddress();
   printf("currentHost = %s\n", currentHost);
   printf("Current IP address = %s\n", currentIPAddress);
   free(currentHost);
-  free(currentIPAddress);
+  free(currentIPAddress);*/
   //exit(0);
   int sock = 0, valread;
   struct sockaddr_in serv_addr;
@@ -23,6 +23,9 @@ int main()
   char tx_buffer[1024] = {0};
   char rx_buffer[1024] = {0};
   char* client_name = "RangaGaming3 : ";
+  char* host = hostName();
+  char* ip = ipAddress();
+  
 
   if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
   {
@@ -74,8 +77,8 @@ int main()
     if(data.request == QUERY_CLIENT_INFO)
     {
       struct registerClient* reg = (struct registerClient*)calloc(1, sizeof(struct registerClient));
-      strncpy(reg->clienthostname, currenthostname(), sizeof(reg->clienthostname));
-      strncpy(reg->ipAddress, getIPAddress(), sizeof(reg->ipAddress));
+      strncpy(reg->clienthostname, hostName(), sizeof(reg->clienthostname));
+      strncpy(reg->ipAddress, ipAddress(), sizeof(reg->ipAddress));
       reg->id = 1;
       send(sock, reg, sizeof(struct registerClient), 0);
       printf("Sent the client info.\n");
