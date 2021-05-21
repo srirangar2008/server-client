@@ -43,8 +43,28 @@ void PrintClients(struct RegisterClients* head)
   }
 }
 
+int checkDuplicate(struct RegisterClients* head, struct registerClient* data)
+{
+  struct RegisterClients* temp = head;
+  while(temp != NULL)
+  {
+    if(strncmp(temp->client.ipAddress, data->ipAddress, strlen(data->ipAddress)) == 0)
+    {
+      printf("The client already exixts.\n");
+      return 1;
+    }
+    temp = temp->next;
+  }
+  return 0;
+}
+
 void AddNode(struct RegisterClients* head, struct registerClient* data)
 {
+  int ret = checkDuplicate(head, data);
+  if(ret)
+  {
+    return;
+  }
   struct RegisterClients* temp = head;
   while(temp->next != NULL)
   {
