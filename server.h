@@ -1,7 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#define SERVER_IP "192.168.0.109"
+#define SERVER_IP "127.0.0.1"
 struct registerClient
 {
     int id;
@@ -21,6 +21,16 @@ struct serverInfo
     char serverhostname[64];
     char ipAddress[20];
 };
+
+struct RegisterClients
+{
+  struct registerClient client;
+  struct clientStatus status;
+  struct RegisterClients* next;
+};
+
+struct RegisterClients* headNode;
+
 
 
 #endif

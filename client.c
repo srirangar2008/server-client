@@ -42,7 +42,9 @@ int main()
     perror("Address not supported.");
     exit(-1);
   }
-
+  
+  struct datapacket data = { .id = 1, .request = REQUEST};
+  char* message = (char*)calloc(1024, sizeof(char));
   if(connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0)
   {
     perror("COnnect failed.");
@@ -53,10 +55,9 @@ int main()
   data.id = 0;
   strncpy(data.message, "Hi server id 0", sizeof(data.message));
   */
-  struct datapacket data = { .id = 1, .request = REQUEST};
-  char* message = (char*)calloc(1024, sizeof(char));
-  while(1) 
-  {
+ while(1)
+ {
+   
     //valread = read(sock, rx_buffer, 1024);
     //printf("%s", rx_buffer);
     /*printf("Type your message.\n");
@@ -88,7 +89,7 @@ int main()
     printf("Client terminating.\n");
     data.id = 1;
     data.request = TERMINATE;
-    //send(sock, &data, sizeof(struct datapacket), 0);
+    send(sock, &data, sizeof(struct datapacket), 0);
     //printf("Client buffer recvd : %s\n", buffer);
     //bzero(message, sizeof(message));
     free(message);
