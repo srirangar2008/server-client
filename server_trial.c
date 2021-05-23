@@ -103,6 +103,7 @@ int main()
     printf("Connection refused as the client is not registered.\n");
     return -1;
   }
+  }
   return 0;
 }
 
