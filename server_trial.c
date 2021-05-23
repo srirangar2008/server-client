@@ -62,8 +62,8 @@ int main()
     perror("bind failed");
     exit(-1);
   }
- //while(1)
-  //{
+ while(1)
+  {
     printf("Waiting for message from client.\n");
   if(listen(server_fd,3) < 0)
   {
@@ -78,7 +78,7 @@ int main()
   }
   printf("accept successful.\n");
   
-  printf("valread = %d\n", valread);
+  //printf("valread = %d\n", valread);
  while((valread = read(new_socket, &datapack, sizeof(struct datapacket)) != 0 ))
  {
    printf("new socket = %d\n", new_socket);
@@ -101,9 +101,8 @@ int main()
   }
   if(end) 
     printf("Connection refused as the client is not registered.\n");
-  if(cont) 
-    printf("Client registration successful.\n");
-}
+    return -1;
+  }
   return 0;
 }
 
