@@ -9,7 +9,7 @@
 
 enum Request
 {
-    REQUEST = 0,
+    REGISTER = 0,
     QUERY_SERVER_INFO = 1,
     QUERY_CLIENT_INFO = 2,
     TERMINATE = 3

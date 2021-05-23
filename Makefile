@@ -2,7 +2,7 @@
 
 CC=gcc
 SERVER_SRCS=server.c server_utils.c utils.c
-CLIENT_SRCS=client.c utils.c
+CLIENT_SRCS=client.c utils.c client_serv.c
 SERVER_TRIAL_SRCS=server_trial.c server_utils.c utils.c
 
 

@@ -6,6 +6,39 @@
 #include <stdlib.h>
 #include "utils.h"
 #include "server.h"
+#include "client_serv.h"
+#include <ctype.h>
+
+//The main way of communicating is to : 
+// Send the datapacket to the server,
+// Then expect the response 
+
+void help()
+{
+  printf("The client is launched. The following are the services provided.\n \
+          Option 1 : Register your client.\n \
+          Option 2 : Query Server Info.\n \ 
+          Option 3 : Terminate.\n");
+} 
+
+void parseOptions(char* options, int* optint)
+{
+  int i = 0 ;
+  int j = 0;
+  for(i = 0; i < 10; i++)
+  {
+    printf("options[i] = %x\n", options[i]);
+    if(isdigit(options[i]))
+    {
+      optint[j] = atoi(&options[i]);
+      j++;
+    }
+  }
+  for(j = 0; j < i; j++)
+  {
+    printf("optint[%d] = %d\n", j , optint[j]);
+  }
+}
 
 
 int main()
@@ -16,6 +49,24 @@ int main()
   printf("Current IP address = %s\n", currentIPAddress);
   free(currentHost);
   free(currentIPAddress);*/
+  //exit(0);
+  #define MAX_OPTIONS 20
+  help();
+  printf("Enter the options separated by spaces.\n");
+  //exit(0);
+  char* options = (char*)calloc(MAX_OPTIONS, sizeof(char));
+  int* optint = (int*)calloc(MAX_OPTIONS, sizeof(int));
+  int i = 0;
+  char* p = options;
+  fgets(options, MAX_OPTIONS, stdin);
+  /*{ 
+    if(*(p+i) == "\n")
+      break;
+    printf("%d\n",*p);
+    ++i;
+  }*/
+  parseOptions(options, optint);
+  printf("options = %s", options);
   //exit(0);
   int sock = 0, valread;
   struct sockaddr_in serv_addr;
@@ -43,58 +94,40 @@ int main()
     exit(-1);
   }
   
-  struct datapacket data = { .id = 1, .request = REQUEST};
+  struct datapacket data = { .id = 1, .request = REGISTER};
   char* message = (char*)calloc(1024, sizeof(char));
   if(connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0)
   {
     perror("COnnect failed.");
     exit(-1);
   }
-
-  /*struct datapacket data;
-  data.id = 0;
-  strncpy(data.message, "Hi server id 0", sizeof(data.message));
-  */
- while(1)
- {
-   
-    //valread = read(sock, rx_buffer, 1024);
-    //printf("%s", rx_buffer);
-    /*printf("Type your message.\n");
-    char* message = (char*)calloc(1024, sizeof(char));
-    printf("RangaGaming3 : ");
-    bzero(message, sizeof(message));
-    scanf("%s",message);
-    strncat(tx_buffer, client_name, strlen(client_name));
-    strncat(tx_buffer, message, strlen(message));*/
-    //printf("TX Buffer = %s", tx_buffer);
-    send(sock, &data, sizeof(struct datapacket), 0);
-    printf("Message sent.\n");
-    //exit(0);
-    //printf("Hello sent from client.\n");
-    valread = read(sock, &data, sizeof(struct datapacket));
-    printf("%d", data.id);
-    printf("Message recvd.\n");
-    if(data.request == QUERY_CLIENT_INFO)
+  
+  while(optint[i] != 0)
+  {
+    switch(optint[i])
     {
-      struct registerClient* reg = (struct registerClient*)calloc(1, sizeof(struct registerClient));
-      strncpy(reg->clienthostname, hostName(), sizeof(reg->clienthostname));
-      strncpy(reg->ipAddress, ipAddress(), sizeof(reg->ipAddress));
-      reg->id = 1;
-      send(sock, reg, sizeof(struct registerClient), 0);
-      printf("Sent the client info.\n");
+      case 1 : 
+      optionRegister(sock);
+      break;
 
+      case 2 : 
+      printf("Need to implement the server query.\n");
+      break;
+
+      case 3 : 
+      optionTerminate(sock);
+      break;
+
+      default : 
+      printf("option not supported.\n");
+      break;
     }
-    sleep(1);
-    printf("Client terminating.\n");
-    data.id = 1;
-    data.request = TERMINATE;
-    send(sock, &data, sizeof(struct datapacket), 0);
-    //printf("Client buffer recvd : %s\n", buffer);
-    //bzero(message, sizeof(message));
-    free(message);
-    break;
+    ++i;
   }
   
-  return 0;
+  sleep(1);
+  
+  
+  
+return 0;
 }

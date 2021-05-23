@@ -81,7 +81,7 @@ int main()
  //{
    printf("new socket = %d\n", new_socket);
    valread = read(new_socket, &datapack, sizeof(struct datapacket));
-  if(datapack.request == REQUEST)
+  if(datapack.request == REGISTER)
   {
     printf("Server : Calling the register function.\n");
     clientregister(&datapack, new_socket);

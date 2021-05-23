@@ -65,13 +65,13 @@ int main()
  while(1)
   {
     printf("Waiting for message from client.\n");
-  if(listen(server_fd,3) < 0)
+    if(listen(server_fd,3) < 0)
   {
     perror("Listen failed");
     exit(-1);
   }
-  printf("Listen succesdful\n");
-  if((new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen)) < 0)
+    printf("Listen succesdful\n");
+    if((new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen)) < 0)
   {
     perror("accept failed");
     exit(-1);
@@ -83,7 +83,7 @@ int main()
  {
    printf("new socket = %d\n", new_socket);
    //valread = read(new_socket, &datapack, sizeof(struct datapacket));
-  if(datapack.request == REQUEST)
+  if(datapack.request == REGISTER)
   {
     printf("Server : Calling the register function.\n");
     clientregister(&datapack, new_socket);
@@ -101,7 +101,7 @@ int main()
   }
   if(end) 
     printf("Connection refused as the client is not registered.\n");
-    return -1;
+    //return -1;
   }
   }
   return 0;
