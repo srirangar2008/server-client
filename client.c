@@ -27,17 +27,17 @@ void parseOptions(char* options, int* optint)
   int j = 0;
   for(i = 0; i < 10; i++)
   {
-    printf("options[i] = %x\n", options[i]);
+    //printf("options[i] = %x\n", options[i]);
     if(isdigit(options[i]))
     {
       optint[j] = atoi(&options[i]);
       j++;
     }
   }
-  for(j = 0; j < i; j++)
+  /*for(j = 0; j < i; j++)
   {
     printf("optint[%d] = %d\n", j , optint[j]);
-  }
+  }*/
 }
 
 
@@ -94,7 +94,7 @@ int main()
     exit(-1);
   }
   
-  struct datapacket data = { .id = 1, .request = REGISTER};
+  //struct datapacket data = { .id = 1, .request = REGISTER};
   char* message = (char*)calloc(1024, sizeof(char));
   if(connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0)
   {
